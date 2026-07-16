@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sidmarkting Shopping</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#f3f4f6;color:#1e1b4b;min-height:100vh;-webkit-font-smoothing:antialiased}
+.promo-bar{background:linear-gradient(90deg,#10b981,#059669,#047857);color:#fff;text-align:center;padding:10px 16px;font-weight:700;font-size:0.82rem;letter-spacing:0.3px}
+header{background:linear-gradient(135deg,#0f172a,#1e293b);padding:16px 16px 14px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.15)}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.logo{font-size:1.5rem;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px}
+.logo-icon{width:38px;height:38px;background:#10b981;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:white}
+.vip-badge{display:none;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e1b4b;padding:3px 10px;border-radius:20px;font-size:0.65rem;font-weight:900;letter-spacing:0.5px}
+.vip-badge.show{display:inline-flex}
+.hdr-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cart-btn{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:10px 18px;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:all 0.3s}
+.cart-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(16,185,129,0.4)}
+.cart-count{background:#fff;color:#10b981;border-radius:50%;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800}
+.fav-btn-header{background:rgba(255,255,255,0.15);color:#fff;border:1.5px solid rgba(255,255,255,0.2);padding:10px 16px;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:all 0.3s}
+.fav-btn-header:hover{background:rgba(255,255,255,0.25)}
+.fav-count{background:#fff;color:#10b981;border-radius:50%;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800}
+.vip-btn{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e1b4b;border:none;padding:10px 14px;border-radius:12px;font-size:0.85rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.3s}
+.search-wrap{position:relative;width:100%}
+.search-wrap input{width:100%;padding:11px 16px 11px 40px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);font-size:0.9rem;font-family:inherit;background:rgba(255,255,255,0.08);color:#fff;outline:none}
+.search-wrap input::placeholder{color:rgba(255,255,255,0.45)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:0.5}
+nav{background:#fff;padding:10px 16px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:90;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.cat-btn{padding:8px 14px;border-radius:10px;border:1.5px solid #e5e7eb;background:#fff;font-family:inherit;font-weight:600;font-size:0.82rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;color:#475569}
+.cat-btn:hover,.cat-btn.active{background:#0f172a;color:#fff;border-color:#0f172a}
+.main{max-width:1200px;margin:0 auto;padding:20px 16px 40px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.section-title{font-size:1.4rem;font-weight:900}
+.section-count{font-size:0.85rem;color:#94a3b8;font-weight:600}
+.vip-section{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:20px;padding:24px;margin-bottom:24px;display:none}
+.vip-section.show{display:block}
+.vip-title{font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:6px}
+.vip-subtitle{color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:all 0.3s ease;border:1px solid #f1f5f9;cursor:pointer;display:flex;flex-direction:column;min-height:380px}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,0.1)}
+.card-img{height:180px;position:relative;overflow:hidden;background:#f8fafc;flex-shrink:0}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.card:hover .card-img img{transform:scale(1.06)}
+.badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:8px;font-size:0.6rem;font-weight:800;color:#fff;text-transform:uppercase;z-index:2}
+.b-hit{background:#ef4444}.b-new{background:#22c55e}.b-sale{background:#f59e0b}.b-lux{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
+.wish-btn{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.95);border:none;cursor:pointer;font-size:0.85rem;z-index:2;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+.wish-btn:hover{background:#ef4444;color:#fff}
+.wish-btn.is-fav{background:#ef4444;color:#fff}
+.card-body{padding:14px;flex:1;display:flex;flex-direction:column}
+.card-cat{font-size:0.6rem;color:#94a3b8;font-weight:600;text-transform:uppercase;margin-bottom:4px}
+.card-name{font-weight:800;font-size:0.9rem;margin-bottom:4px;line-height:1.3}
+.card-rating{display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.stars{color:#fbbf24;font-size:0.7rem}
+.rating-text{font-size:0.68rem;color:#94a3b8}
+.card-desc{font-size:0.72rem;color:#6b7280;margin-bottom:auto;line-height:1.4}
+.card-footer{margin-top:12px;padding-top:10px;border-top:1px solid #f1f5f9}
+.price-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.price-block{display:flex;align-items:baseline;gap:6px}
+.price{font-size:1.15rem;font-weight:900;color:#1e1b4b}
+.old-price{font-size:0.72rem;color:#94a3b8;text-decoration:line-through}
+.add-btn-full{width:100%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:12px;padding:12px;font-weight:700;cursor:pointer;font-family:inherit;font-size:0.85rem;transition:all 0.3s}
+.add-btn-full:hover{transform:scale(1.02)}
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(8px);z-index:1000;display:none;justify-content:center;align-items:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,0.3)}
+.modal-header{padding:18px 22px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center}
+.modal-header h2{font-weight:900;font-size:1.15rem}
+.modal-close{background:#f1f5f9;border:none;font-size:1.2rem;cursor:pointer;width:34px;height:34px;border-radius:50%}
+.modal-body{padding:20px 22px}
+.cart-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f1f5f9}
+.cart-item-img{width:50px;height:50px;border-radius:12px;overflow:hidden}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1}
+.cart-item-name{font-weight:700;font-size:0.88rem}
+.cart-item-price{color:#10b981;font-weight:800;font-size:0.84rem}
+.qty-control{display:flex;align-items:center;gap:6px}
+.qty-btn{width:28px;height:28px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
+.qty-val{font-weight:800;min-width:18px;text-align:center}
+.delete-btn{background:none;border:none;cursor:pointer;font-size:1rem;opacity:0.3}
+.cart-total{padding:18px 22px;border-top:2px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center}
+.total-label{font-weight:700}
+.total-value{font-weight:900;font-size:1.3rem;color:#10b981}
+.checkout-btn{margin:0 22px 18px;padding:15px;width:calc(100% - 44px);background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit}
+.empty-cart{text-align:center;padding:40px 16px;color:#94a3b8}
+footer{background:#0f172a;color:rgba(255,255,255,0.5);text-align:center;padding:24px;margin-top:30px;font-size:0.82rem}
+.toast{position:fixed;bottom:20px;right:20px;background:#0f172a;color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,0.25);z-index:3000;transform:translateY(120px);opacity:0;transition:all 0.4s}
+.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.card-img{height:140px}.card{min-height:340px}}
+</style>
+</head>
+<body>
+
+<div class="promo-bar"> MEGA OFERTAS — Frete Grátis para todo o Brasil em compras acima de R$ 299!</div>
+
+<header>
+<div class="hdr-top">
+<div class="logo">
+<div class="logo-icon"><i class="fas fa-shopping-bag"></i></div>
+Sidmarkting
+<span class="vip-badge" id="vipBadge">👑 VIP</span>
+</div>
+<div class="hdr-actions">
+<button class="fav-btn-header" onclick="toggleFavView()">❤️ <span class="fav-count" id="favCount">0</span></button>
+<button class="vip-btn" onclick="openVipModal()"> VIP</button>
+<button class="cart-btn" onclick="openCart()"><i class="fas fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></button>
+</div>
+</div>
+<div class="search-wrap">
+<span class="search-icon"><i class="fas fa-search"></i></span>
+<input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
+</div>
+</header>
+
+<nav id="categoryNav"></nav>
+
+<main class="main">
+<div class="vip-section" id="vipSection">
+<div class="vip-title">👑 Zona VIP Exclusiva</div>
+<div class="vip-subtitle">Ofertas secretas apenas para clientes VIP</div>
+<div class="grid" id="vipGrid"></div>
+</div>
+
+<div class="section-header">
+<h2 class="section-title" id="sectionTitle">🏪 Todos os Produtos</h2>
+<span class="section-count" id="sectionCount"></span>
+</div>
+<div class="grid" id="productsGrid"></div>
+</main>
+
+<footer>© 2026 Sidmarkting Shopping. Todos os direitos reservados.<br>Desenvolvido por Sidnei Santos | <a href="https://sidmarkting-portifolio.vercel.app/" style="color:#10b981;text-decoration:none">Ver Portfólio</a></footer>
+
+<!-- Carrinho -->
+<div class="modal-overlay" id="cartOverlay">
+<div class="modal">
+<div class="modal-header"><h2>🛒 Seu Carrinho</h2><button class="modal-close" onclick="closeCart()">✕</button></div>
+<div class="modal-body" id="cartBody"></div>
+<div class="cart-total" id="cartTotalWrap" style="display:none"><span class="total-label">Total:</span><span class="total-value" id="cartTotal">R$ 0</span></div>
+<button class="checkout-btn" id="checkoutBtn" style="display:none" onclick="finalizarWhatsApp()"><i class="fab fa-whatsapp"></i> Finalizar no WhatsApp</button>
+</div>
+</div>
+
+<!-- VIP Modal -->
+<div class="modal-overlay" id="vipOverlay">
+<div class="modal" style="max-width:380px;text-align:center;padding:24px">
+<button class="modal-close" onclick="closeVipModal()" style="position:absolute;top:16px;right:16px">✕</button>
+<h2 style="margin-bottom:10px">🔐 Acesso VIP</h2>
+<p style="color:#6b7280;margin-bottom:20px;font-size:0.9rem">Digite a senha para desbloquear ofertas secretas.</p>
+<input type="text" id="vipInput" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;font-size:1.1rem;margin-bottom:16px" placeholder="Senha VIP...">
+<button onclick="checkVip()" style="width:100%;padding:14px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e1b4b;border:none;border-radius:12px;font-weight:800;cursor:pointer">Desbloquear</button>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATEGORIES=[
+{id:"all",name:"Todos",icon:"🏪"},
+{id:"tech",name:"Eletrônicos",icon:"📱"},
+{id:"cloth",name:"Moda",icon:"👕"},
+{id:"home",name:"Casa",icon:"🏠"},
+{id:"beauty",name:"Beleza",icon:"💄"},
+{id:"gro",name:"Mercado",icon:"🛒"}
+];
+
+const PRODUCTS=[
+{id:1,name:"iPhone 15 Pro",price:8999,oldPrice:10999,desc:"256GB, Titânio Natural",cat:"tech",badge:"HIT",badgeType:"hit",rating:4.9,reviews:1234,img:"https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400"},
+{id:2,name:"Samsung Galaxy S24",price:4499,oldPrice:5499,desc:"128GB, 5G, Câmera 50MP",cat:"tech",badge:"NOVO",badgeType:"new",rating:4.8,reviews:890,img:"https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400"},
+{id:3,name:"Notebook Dell Inspiron",price:3899,oldPrice:4599,desc:"i5, 8GB RAM, SSD 512GB",cat:"tech",badge:"",badgeType:"",rating:4.7,reviews:567,img:"https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400"},
+{id:4,name:"AirPods Pro 2",price:1899,oldPrice:2299,desc:"Com cancelamento de ruído",cat:"tech",badge:"HIT",badgeType:"hit",rating:4.9,reviews:2345,img:"https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400"},
+{id:5,name:"Smart TV LG 55\" 4K",price:2499,oldPrice:3299,desc:"WebOS, ThinQ AI, HDR",cat:"tech",badge:"OFERTA",badgeType:"sale",rating:4.8,reviews:678,img:"https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400"},
+{id:6,name:"Tênis Nike Air Max",price:799,oldPrice:999,desc:"Conforto e estilo urbano",cat:"cloth",badge:"HIT",badgeType:"hit",rating:4.8,reviews:1567,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"},
+{id:7,name:"Jaqueta Jeans Premium",price:249,oldPrice:349,desc:"Jeans escuro, corte moderno",cat:"cloth",badge:"",badgeType:"",rating:4.6,reviews:234,img:"https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400"},
+{id:8,name:"Óculos Ray-Ban Aviador",price:899,oldPrice:1199,desc:"Lente verde clássica",cat:"cloth",badge:"LUXO",badgeType:"lux",rating:4.9,reviews:567,img:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400"},
+{id:9,name:"Camiseta Básica Algodão",price:89,oldPrice:129,desc:"100% algodão, várias cores",cat:"cloth",badge:"OFERTA",badgeType:"sale",rating:4.5,reviews:1234,img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"},
+{id:10,name:"Sofá Retrátil 3 Lugares",price:2899,oldPrice:3599,desc:"Tecido suede, super confortável",cat:"home",badge:"",badgeType:"",rating:4.7,reviews:234,img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400"},
+{id:11,name:"Geladeira Brastemp 375L",price:3499,oldPrice:4299,desc:"Frost Free, Inox",cat:"home",badge:"HIT",badgeType:"hit",rating:4.8,reviews:678,img:"https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400"},
+{id:12,name:"Robô Aspirador Inteligente",price:1299,oldPrice:1899,desc:"Mapeamento a laser, Wi-Fi",cat:"home",badge:"NOVO",badgeType:"new",rating:4.6,reviews:456,img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400"},
+{id:13,name:"Cafeteira Nespresso",price:699,oldPrice:899,desc:"Cápsulas, design compacto",cat:"home",badge:"",badgeType:"",rating:4.8,reviews:890,img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400"},
+{id:14,name:"Perfume Importado 100ml",price:459,oldPrice:599,desc:"Fragrância amadeirada",cat:"beauty",badge:"LUXO",badgeType:"lux",rating:4.9,reviews:345,img:"https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400"},
+{id:15,name:"Secador de Cabelo Pro",price:399,oldPrice:549,desc:"2200W, jato frio, íons",cat:"beauty",badge:"",badgeType:"",rating:4.7,reviews:234,img:"https://images.unsplash.com/photo-1522338140262-f46f5913618a?w=400"},
+{id:16,name:"Kit Maquiagem Completo",price:189,oldPrice:259,desc:"Paleta, batons e pincéis",cat:"beauty",badge:"OFERTA",badgeType:"sale",rating:4.6,reviews:567,img:"https://images.unsplash.com/photo-1596462502278-27bfdd403348?w=400"},
+{id:17,name:"Café Especial 500g",price:45,oldPrice:65,desc:"Grãos selecionados, torra média",cat:"gro",badge:"HIT",badgeType:"hit",rating:4.9,reviews:890,img:"https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400"},
+{id:18,name:"Azeite de Oliva Extra Virgem",price:39,oldPrice:55,desc:"Importado, 500ml",cat:"gro",badge:"",badgeType:"",rating:4.8,reviews:456,img:"https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400"},
+{id:19,name:"Chocolate Artesanal 70%",price:28,oldPrice:39,desc:"Cacau puro, sem lactose",cat:"gro",badge:"NOVO",badgeType:"new",rating:4.7,reviews:234,img:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=400"},
+{id:20,name:"Vinho Tinto Reserva",price:89,oldPrice:129,desc:"Cabernet Sauvignon, 750ml",cat:"gro",badge:"LUXO",badgeType:"lux",rating:4.8,reviews:345,img:"https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400"}
+];
+
+const VIP_PRODUCTS=[
+{id:101,name:"MacBook Pro M3",price:14999,oldPrice:18999,desc:"14\", 16GB RAM, 512GB SSD",cat:"tech",badge:"VIP",badgeType:"lux",rating:5.0,reviews:123,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400"},
+{id:102,name:"PlayStation 5 Slim",price:3799,oldPrice:4499,desc:"Com controle DualSense",cat:"tech",badge:"VIP",badgeType:"hit",rating:4.9,reviews:2345,img:"https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400"},
+{id:103,name:"Relógio Apple Watch Ultra",price:4499,oldPrice:5499,desc:"Titânio, GPS + Celular",cat:"tech",badge:"VIP",badgeType:"new",rating:4.9,reviews:567,img:"https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400"}
+];
+
+let cart=[];
+let favorites=[];
+let activeCat="all";
+let showFavorites=false;
+let vipUnlocked=false;
+
+function fmt(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2})}
+function stars(r){return '★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r))}
+function getCatIcon(id){return CATEGORIES.find(c=>c.id===id)?.icon||'📦'}
+function getCatName(id){return CATEGORIES.find(c=>c.id===id)?.name||''}
+function isFav(id){return favorites.includes(id)}
+function toggleFav(id){
+if(isFav(id)){favorites=favorites.filter(f=>f!==id);showToast('Removido dos favoritos');}
+else{favorites.push(id);showToast('Adicionado aos favoritos ❤️');}
+updateFavCount();renderProducts();
+}
+function updateFavCount(){document.getElementById('favCount').textContent=favorites.length}
+function findProduct(id){return PRODUCTS.find(p=>p.id===id)||VIP_PRODUCTS.find(p=>p.id===id)}
+
+function renderCategories(){
+document.getElementById('categoryNav').innerHTML=CATEGORIES.map(c=>`<button class="cat-btn ${c.id===activeCat?'active':''}" onclick="selectCategory('${c.id}')">${c.icon} ${c.name}</button>`).join('');
+}
+function selectCategory(id){activeCat=id;showFavorites=false;renderCategories();renderProducts();}
+function toggleFavView(){showFavorites=!showFavorites;renderProducts();}
+
+function renderProducts(){
+const q=document.getElementById('searchInput').value.toLowerCase();
+let list=PRODUCTS.filter(p=>{
+const catMatch=activeCat==='all'||p.cat===activeCat;
+const searchMatch=p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q);
+const favMatch=!showFavorites||isFav(p.id);
+return catMatch&&searchMatch&&favMatch;
+});
+
+document.getElementById('sectionTitle').textContent=showFavorites?'❤️ Favoritos':(activeCat==='all'?' Todos os Produtos':getCatName(activeCat));
+document.getElementById('sectionCount').textContent=list.length+' itens';
+
+const grid=document.getElementById('productsGrid');
+if(!list.length){grid.innerHTML='<div style="text-align:center;padding:60px;color:#94a3b8;grid-column:1/-1"><h3>Nenhum produto encontrado</h3></div>';return;}
+
+grid.innerHTML=list.map(p=>`
+<div class="card">
+<div class="card-img">
+${p.badge?`<div class="badge b-${p.badgeType}">${p.badge}</div>`:''}
+<button class="wish-btn ${isFav(p.id)?'is-fav':''}" onclick="event.stopPropagation();toggleFav(${p.id})">${isFav(p.id)?'♥':'♡'}</button>
+<img src="${p.img}" alt="${p.name}" loading="lazy">
+</div>
+<div class="card-body">
+<div class="card-cat">${getCatIcon(p.cat)} ${getCatName(p.cat).toUpperCase()}</div>
+<div class="card-name">${p.name}</div>
+<div class="card-rating"><span class="stars">${stars(p.rating)}</span><span class="rating-text">${p.rating} (${p.reviews})</span></div>
+<div class="card-desc">${p.desc}</div>
+<div class="card-footer">
+<div class="price-row"><div class="price-block">${p.oldPrice?`<span class="old-price">${fmt(p.oldPrice)}</span>`:''}<span class="price">${fmt(p.price)}</span></div></div>
+<button class="add-btn-full" onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+</div></div></div>
+`).join('');
+}
+
+function renderVipProducts(){
+document.getElementById('vipGrid').innerHTML=VIP_PRODUCTS.map(p=>`
+<div class="card">
+<div class="card-img"><div class="badge b-lux">VIP</div><img src="${p.img}" alt="${p.name}"></div>
+<div class="card-body">
+<div class="card-cat">👑 EXCLUSIVO</div>
+<div class="card-name">${p.name}</div>
+<div class="card-desc">${p.desc}</div>
+<div class="card-footer">
+<div class="price-row"><span class="old-price">${fmt(p.oldPrice)}</span><span class="price">${fmt(p.price)}</span></div>
+<button class="add-btn-full" onclick="addToCart(${p.id})">Adicionar</button>
+</div></div></div>
+`).join('');
+}
+
+function addToCart(id){
+const p=findProduct(id);if(!p)return;
+const existing=cart.find(c=>c.id===id);
+if(existing)existing.qty++;else cart.push({id,qty:1});
+updateCartCount();showToast(`${p.name} adicionado! 🛒`);
+}
+function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((a,b)=>a+b.qty,0)}
+
+function openCart(){
+document.getElementById('cartOverlay').classList.add('show');
+const body=document.getElementById('cartBody');
+if(!cart.length){body.innerHTML='<div class="empty-cart"><h3>Carrinho vazio</h3><p>Adicione produtos para continuar</p></div>';document.getElementById('cartTotalWrap').style.display='none';document.getElementById('checkoutBtn').style.display='none';return;}
+let total=0;
+body.innerHTML=cart.map((it,i)=>{const p=findProduct(it.id);const s=p.price*it.qty;total+=s;return `<div class="cart-item"><div class="cart-item-img"><img src="${p.img}"></div><div class="cart-item-info"><div class="cart-item-name">${p.name}</div><div class="cart-item-price">${fmt(p.price)} x ${it.qty}</div></div><div class="qty-control"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span class="qty-val">${it.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div><button class="delete-btn" onclick="removeItem(${i})">🗑</button></div>`}).join('');
+document.getElementById('cartTotal').textContent=fmt(total);
+document.getElementById('cartTotalWrap').style.display='flex';
+document.getElementById('checkoutBtn').style.display='block';
+}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('show')}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateCartCount();openCart();}
+function removeItem(i){cart.splice(i,1);updateCartCount();openCart();}
+
+function finalizarWhatsApp(){
+if(!cart.length)return;
+let msg="*Olá! Gostaria de finalizar meu pedido no Sidmarkting Shopping:*\n\n";
+let total=0;
+cart.forEach(it=>{const p=findProduct(it.id);const s=p.price*it.qty;total+=s;msg+=`- ${p.name} (x${it.qty}): ${fmt(s)}\n`;});
+msg+=`\n*Total: ${fmt(total)}*\n\nAguardo instruções de pagamento e entrega!`;
+window.open(`https://wa.me/5521966053200?text=${encodeURIComponent(msg)}`,'_blank');
+closeCart();showToast('Redirecionando para o WhatsApp...');
+}
+
+function openVipModal(){if(vipUnlocked){document.getElementById('vipSection').classList.toggle('show');return;}document.getElementById('vipOverlay').classList.add('show');}
+function closeVipModal(){document.getElementById('vipOverlay').classList.remove('show')}
+function checkVip(){
+if(document.getElementById('vipInput').value==='SIDNEI10'){
+vipUnlocked=true;document.getElementById('vipBadge').classList.add('show');document.getElementById('vipSection').classList.add('show');closeVipModal();showToast('VIP Desbloqueado! 👑');renderVipProducts();
+}else{showToast('Senha incorreta!')}
+}
+
+function filterProducts(){renderProducts()}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+
+renderCategories();renderProducts();
+</script>
+</body>
+  </html>
